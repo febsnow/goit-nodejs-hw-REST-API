@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const validation = require('./contacts-validation-schema');
+
 const Contacts = require('../../model/contacts');
+const { validate } = require('uuid');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -28,7 +31,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validation.addContact, async (req, res, next) => {
   try {
     const contact = await Contacts.addContact(req.body);
 
@@ -75,8 +78,18 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/:contactId', async (req, res, next) => {
+router.patch('/:contactId', validation.updateContact, async (req, res, next) => {
   try {
+    // if (Object.keys(req.body).length === 0) {
+    //   return res.json({
+    //     status: 'error',
+    //     code: 400,
+    //     data: {
+    //       message: 'missing fields',
+    //     },
+    //   });
+    // }
+
     const contact = await Contacts.updateContact(req.params.contactId, req.body);
     if (contact) {
       return res.json({

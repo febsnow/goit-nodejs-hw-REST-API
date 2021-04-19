@@ -6,24 +6,6 @@ const { v4: uuidv4 } = require('uuid');
 
 const contactsPath = path.join(__dirname, './contacts.json');
 
-// async function writeAndShowContacts(data) {
-//   try {
-//     fs.writeFile(contactsPath, JSON.stringify(data, null, '\t')).then(console.table(data));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-// async function getContactsList() {
-//   try {
-//     const contacts = await fs.readFile(contactsPath);
-//     const parsedContacts = JSON.parse(contacts);
-//     return parsedContacts;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 const listContacts = async () => {
   const contacts = await fs.readFile(contactsPath);
   const parsedContacts = JSON.parse(contacts);
@@ -70,7 +52,11 @@ const updateContact = async (contactId, body) => {
   console.log('after', updatedContact);
 
   const updatedContactsList = contactsList.map((contact) => {
-    contact.id == contactId ? updatedContact : contact;
+    if (contact.id == contactId) {
+      return updatedContact;
+    } else {
+      return contact;
+    }
   });
 
   await fs.writeFile(contactsPath, JSON.stringify(updatedContactsList, null, '\t'));
