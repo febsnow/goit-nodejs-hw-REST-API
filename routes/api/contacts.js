@@ -3,7 +3,6 @@ const router = express.Router();
 const validation = require('./contacts-validation-schema');
 
 const Contacts = require('../../model/contacts');
-const { validate } = require('uuid');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -39,7 +38,7 @@ router.post('/', validation.addContact, async (req, res, next) => {
       return res.status(400).json({
         code: 400,
         data: {
-          message: 'missing required name field',
+          message: 'missing required field',
         },
       });
     } else {
