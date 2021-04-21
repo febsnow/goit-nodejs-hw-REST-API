@@ -23,7 +23,7 @@ const removeContact = async (contactId) => {
   const contactToRemove = await getContactById(contactId);
 
   if (!contactToRemove) {
-    return;
+    return console.log(`Contact with ID ${contactId} not found`);
   }
 
   const filteredContacts = contacts.filter((contact) => contact.id != contactToRemove.id);
@@ -53,6 +53,10 @@ const updateContact = async (contactId, body) => {
   const contactsList = await listContacts();
   const contactToUpdate = await getContactById(contactId);
   console.log('before', contactToUpdate);
+
+  if (!contactToUpdate) {
+    return console.log(`Contact with ID ${contactId} not found`);
+  }
 
   const updatedContact = Object.assign(contactToUpdate, body);
   console.log('after', updatedContact);
