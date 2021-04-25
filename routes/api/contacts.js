@@ -6,7 +6,7 @@ const contacts = require('../../model/contacts');
 
 router.get('/', async (req, res, next) => {
   try {
-    const contactsList = await contacts.listContacts();
+    const contactsList = await contacts.getAllContacts();
     res.json({
       status: 'success',
       code: 200,
@@ -33,7 +33,6 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', validation.addContact, async (req, res, next) => {
   try {
     const contact = await contacts.addContact(req.body);
-
     if (!contact) {
       return res.status(400).json({
         code: 400,
