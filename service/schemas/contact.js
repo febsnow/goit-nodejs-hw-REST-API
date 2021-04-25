@@ -5,18 +5,13 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      minlength: 2,
-      required: true,
+      // required: true,
     },
     email: {
       type: String,
-      required: true,
     },
     phone: {
       type: Number,
-      min: 10,
-      max: 10,
-      required: true,
     },
     favorite: {
       type: Boolean,
@@ -29,15 +24,15 @@ const contactSchema = new Schema(
   }
 );
 
-contactSchema.path('name').validate((value) => {
-  const entry = /[A-Z]\w+/;
-  return entry.test(String(value));
-});
+// contactSchema.path('name').validate((value) => {
+//   const entry = /[A-Z]/;
+//   return entry.test(String(value));
+// });
 
-contactSchema.path('phone').validate((value) => {
-  const entry = /^[0-9]+$/;
-  return entry.test(Number(value));
-});
+// contactSchema.path('phone').validate((value) => {
+//   const entry = /^[0-9]+$/;
+//   return entry.test(Number(value));
+// });
 
 // contactSchema.path('email').validate((value) => {
 //     const entry =
