@@ -8,7 +8,7 @@ const addContactValidation = Joi.object({
     .length(10)
     .pattern(/^[0-9]+$/)
     .required(),
-  // .pattern(/^\(\d{3}\)\d{3}-\d{2}-\d{2}$/)
+  favorite: Joi.boolean().optional(),
 });
 
 const updateContactValidation = Joi.object({
@@ -20,6 +20,10 @@ const updateContactValidation = Joi.object({
     .pattern(/^[0-9]+$/)
     .optional(),
 }).or('name', 'email', 'phone');
+
+const updateStatusContactValidation = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const validate = async (schema, obj, next) => {
   try {
@@ -38,5 +42,8 @@ module.exports = {
   },
   updateContact: async (req, res, next) => {
     return await validate(updateContactValidation, req.body, next);
+  },
+  updateStatus: async (req, res, next) => {
+    return await validate(updateStatusContactValidation, req.body, next);
   },
 };

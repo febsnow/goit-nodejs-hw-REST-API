@@ -11,8 +11,6 @@ const getContactById = async (id) => {
 };
 
 const removeContact = async (id) => {
-  const contactToRemove = await Contacts.findOne({ _id: id });
-
   const result = await Contacts.findByIdAndRemove({ _id: id });
   return result;
 };
@@ -27,10 +25,16 @@ const updateContact = async (id, body) => {
   return result;
 };
 
+const updateStatusContact = async (id, body) => {
+  const result = Contacts.findByIdAndUpdate({ _id: id }, { ...body }, { new: true });
+  return result;
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

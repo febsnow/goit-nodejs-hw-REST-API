@@ -109,4 +109,38 @@ router.patch('/:contactId', validation.updateContact, async (req, res, next) => 
   }
 });
 
+router.patch('/:contactId/favorite', validation.updateStatus, async (req, res, next) => {
+  try {
+    // if (Object.keys(req.body).length === 0) {
+    //   return res.json({
+    //     status: 'error',
+    //     code: 400,
+    //     data: {
+    //       message: 'missing fields',
+    //     },
+    //   });
+    // }
+
+    const contact = await contacts.updateStatusContact(req.params.contactId, req.body);
+
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        data: 'Not Found',
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = router;
