@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
   res.status(status).json({
     status: status === 500 ? 'fail' : 'error',
     code: status,
-    message: err.message,
+    message: err.message.replace(/"/g, ''),
   });
 });
 

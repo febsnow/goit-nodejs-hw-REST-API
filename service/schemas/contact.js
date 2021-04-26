@@ -34,10 +34,6 @@ contactSchema.path('phone').validate((value) => {
   return entry.test(Number(value));
 });
 
-// contactSchema.path('email').validate((value) => {
-//     const entry =
-// })
-
 const Contact = model('contact', contactSchema);
 
 module.exports = Contact;
