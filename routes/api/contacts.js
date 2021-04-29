@@ -23,7 +23,9 @@ router.get('/:contactId', async (req, res, next) => {
     if (contact) {
       return res.json({ status: 'success', code: 200, data: { contact } });
     } else {
-      return res.status(404).json({ status: 'error', code: 404, data: 'Not Found' });
+      return res
+        .status(404)
+        .json({ status: 'error', code: 404, data: `User with ID ${req.params.contactId} not found` });
     }
   } catch (error) {
     next(error);
