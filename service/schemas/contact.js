@@ -9,6 +9,10 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      validate(value) {
+        const re = /\S+@\S+\.\S+/;
+        return re.test(String(value).toLowerCase());
+      },
     },
     phone: {
       type: Number,

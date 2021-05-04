@@ -5,6 +5,7 @@ require('../../config/config-passport');
 
 const guard = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (error, user) => {
+    console.log('guard');
     let token = null;
     if (req.get('Authorization')) {
       token = req.get('Authorization').split(' ')[1];

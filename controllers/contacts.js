@@ -1,48 +1,140 @@
-const Contact = require('../service/schemas/contact');
+const Contact = require('../model/contacts');
 
-const getAllContacts = async () => {
-  const result = await Contact.find({});
-  return result;
-};
-
-const getContactById = async (id) => {
+const getAllContacts = async (req, res, next) => {
   try {
-    const result = await Contact.findOne({ _id: id });
-    return result;
+    const userId = req.user ? req.user.id : null;
+    const contactsList = await Contact.getAllContacts(userId, req.query);
+
+    res.json({
+      status: 'success',
+      code: 200,
+      data: { contactsList },
+    });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
-const removeContact = async (id) => {
+const getContactById = async (req, res, next) => {
   try {
-    const result = await Contact.findByIdAndRemove({ _id: id });
-    return result;
+    const userId = req.user ? req.user.id : null;
+    const contact = await Contact.getContactById(userId, req.params.contactId);
+    if (contact) {
+      return res.json({ status: 'success', code: 200, data: { contact } });
+    } else {
+      return res
+        .status(404)
+        .json({ status: 'error', code: 404, data: `User with ID ${req.params.contactId} not found` });
+    }
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
-const addContact = async (body) => {
-  const result = await Contact.create(body);
-  return result;
-};
-
-const updateContact = async (id, body) => {
+const removeContact = async (req, res, next) => {
   try {
-    const result = await Contact.findByIdAndUpdate({ _id: id }, { ...body }, { new: true });
-    return result;
-  } catch (error) {
-    console.log(error);
+    const userId = req.user ? req.user.id : null;
+
+    const contact = await Contact.removeContact(userId, req.params.contactId);
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          message: 'Contact deleted',
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        data: 'Not Found',
+      });
+    }
+  } catch (e) {
+    next(e);
   }
 };
 
-const updateStatusContact = async (id, body) => {
+const addContact = async (req, res, next) => {
   try {
-    const result = Contact.findByIdAndUpdate({ _id: id }, { ...body }, { new: true });
-    return result;
+    const userId = req.user ? req.user.id : null;
+    const contact = await Contact.addContact(userId, req.body);
+    if (!contact) {
+      return res.status(400).json({
+        code: 400,
+        data: {
+          message: 'missing required field',
+        },
+      });
+    } else {
+      return res.status(201).json({
+        code: 201,
+        data: {
+          contact,
+        },
+      });
+    }
   } catch (error) {
-    console.log(error);
+    next(error);
+  }
+};
+
+const updateContact = async (req, res, next) => {
+  try {
+    // if (Object.keys(req.body).length === 0) {
+    //   return res.json({
+    //     status: 'error',
+    //     code: 400,
+    //     data: {
+    //       message: 'missing fields',
+    //     },
+    //   });
+    // }
+
+    const userId = req.user ? req.user.id : null;
+    const contact = await Contact.updateContact(userId, req.params.contactId, req.body);
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        data: 'Not Found',
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const userId = req.user ? req.user.id : null;
+    const contact = await Contact.updateStatusContact(userId, req.params.contactId, req.body);
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        data: 'Not Found',
+      });
+    }
+  } catch (e) {
+    next(e);
   }
 };
 

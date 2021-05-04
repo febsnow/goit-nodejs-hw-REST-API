@@ -52,10 +52,20 @@ const login = async (req, res, next) => {
   });
 };
 
+const getCurrent = async (req, res, next) => {
+  const { email, subscription } = req.user;
+  console.log('controller');
+  return res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { email, subscription },
+  });
+};
+
 const logout = async (req, res, next) => {
   const id = req.id;
   await Users.updateToken(id, null);
   return res.status(HttpCode.NO_CONTENT).json({});
 };
 
-module.exports = { registration, login, logout };
+module.exports = { registration, login, getCurrent, logout };
