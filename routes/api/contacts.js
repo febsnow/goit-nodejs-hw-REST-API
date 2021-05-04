@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const guard = require('./guard');
 const validation = require('./contacts-validation-schema');
 
-const contacts = require('../../model/contacts');
+const contacts = require('../../controllers/contacts');
 
-router.get('/', async (req, res, next) => {
+router.get('/', guard, async (req, res, next) => {
   try {
     const contactsList = await contacts.getAllContacts();
     res.json({
@@ -17,7 +18,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', guard, async (req, res, next) => {
   try {
     const contact = await contacts.getContactById(req.params.contactId);
     if (contact) {
@@ -32,7 +33,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-router.post('/', validation.addContact, async (req, res, next) => {
+router.post('/', guard, validation.addContact, async (req, res, next) => {
   try {
     const contact = await contacts.addContact(req.body);
     if (!contact) {
@@ -55,7 +56,7 @@ router.post('/', validation.addContact, async (req, res, next) => {
   }
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', guard, async (req, res, next) => {
   try {
     const contact = await contacts.removeContact(req.params.contactId);
     if (contact) {
@@ -78,7 +79,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/:contactId', validation.updateContact, async (req, res, next) => {
+router.patch('/:contactId', guard, validation.updateContact, async (req, res, next) => {
   try {
     // if (Object.keys(req.body).length === 0) {
     //   return res.json({
@@ -111,7 +112,7 @@ router.patch('/:contactId', validation.updateContact, async (req, res, next) => 
   }
 });
 
-router.patch('/:contactId/favorite', validation.updateStatus, async (req, res, next) => {
+router.patch('/:contactId/favorite', guard, validation.updateStatus, async (req, res, next) => {
   try {
     // if (Object.keys(req.body).length === 0) {
     //   return res.json({

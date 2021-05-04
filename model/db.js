@@ -7,6 +7,7 @@ const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
+  useCreateIndex: true,
   poolSize: 5,
 });
 
