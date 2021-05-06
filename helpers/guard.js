@@ -1,7 +1,6 @@
-const { token } = require('morgan');
 const passport = require('passport');
-const { HttpCode } = require('../../service/http-codes');
-require('../../config/config-passport');
+const { HttpCode } = require('./http-codes');
+require('../config/config-passport');
 
 const guard = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (error, user) => {

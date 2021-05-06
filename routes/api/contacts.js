@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const guard = require('./guard');
+const guard = require('../../helpers/guard');
 const validation = require('./contacts-validation-schema');
 const {
-  getAllContacts,
+  getContacts,
   getContactById,
   addContact,
   updateContact,
@@ -11,15 +11,12 @@ const {
   updateStatusContact,
 } = require('../../controllers/contacts');
 
-router.get('/', guard, validation.queryContact, getAllContacts);
+router.get('/', guard, validation.queryContact, getContacts).post('/', guard, validation.addContact, addContact);
 
-router.get('/:contactId', guard, getContactById);
-
-router.post('/', guard, validation.addContact, addContact);
-
-router.delete('/:contactId', guard, removeContact);
-
-router.patch('/:contactId', guard, validation.updateContact, updateContact);
+router
+  .get('/:contactId', guard, getContactById)
+  .delete('/:contactId', guard, removeContact)
+  .patch('/:contactId', guard, validation.updateContact, updateContact);
 
 router.patch('/:contactId/favorite', guard, validation.updateStatus, updateStatusContact);
 

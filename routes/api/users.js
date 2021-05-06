@@ -1,6 +1,6 @@
 const express = require('express');
 const { registration, login, logout, getCurrent } = require('../../controllers/users');
-const guard = require('./guard');
+const guard = require('../../helpers/guard');
 const router = express.Router();
 
 router.post('/signup', registration);

@@ -1,9 +1,9 @@
 const Contact = require('../model/contacts');
 
-const getAllContacts = async (req, res, next) => {
+const getContacts = async (req, res, next) => {
   try {
     const userId = req.user ? req.user.id : null;
-    const contactsList = await Contact.getAllContacts(userId, req.query);
+    const contactsList = await Contact.getContacts(userId, req.query);
 
     res.json({
       status: 'success',
@@ -139,7 +139,7 @@ const updateStatusContact = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllContacts,
+  getContacts,
   getContactById,
   removeContact,
   addContact,

@@ -1,6 +1,6 @@
 const Users = require('../model/users');
-const { HttpCode } = require('../service/http-codes');
 const jwt = require('jsonwebtoken');
+const { HttpCode } = require('../helpers/http-codes');
 require('dotenv').config();
 const SECRET_KEY = process.env.SECRET_KEY;
 

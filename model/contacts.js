@@ -1,9 +1,21 @@
 const Contacts = require('../service/schemas/contact');
 
-const getAllContacts = async (userId, query) => {
+const getContacts = async (userId, query) => {
   const { sortBy, sortByDesc, filter, favorite = null, limit = 0, offset = 0 } = query;
 
-  let result = await Contacts.find({ owner: userId })
+  let searchParams = { owner: userId };
+  switch (favorite) {
+    case true:
+      searchParams = { ...searchParams, favorite: true };
+      break;
+    case false:
+      searchParams = { ...searchParams, favorite: false };
+      break;
+    default:
+      searchParams;
+  }
+
+  let result = await Contacts.find(searchParams)
     .sort({
       ...(sortBy ? { [`${sortBy}`]: 1 } : {}),
       ...(sortByDesc ? { [`${sortByDesc}`]: -1 } : {}),
@@ -14,18 +26,6 @@ const getAllContacts = async (userId, query) => {
       path: 'owner',
       select: 'email subscription -_id',
     });
-  if (favorite === false) {
-    return (result = await Contacts.find({ owner: userId, favorite: false }).populate({
-      path: 'owner',
-      select: 'email subscription -_id',
-    }));
-  }
-  if (favorite === true) {
-    return (result = await Contacts.find({ owner: userId, favorite: true }).populate({
-      path: 'owner',
-      select: 'email subscription -_id',
-    }));
-  }
 
   return result;
 };
@@ -81,7 +81,7 @@ const updateStatusContact = async (userId, id, body) => {
 };
 
 module.exports = {
-  getAllContacts,
+  getContacts,
   getContactById,
   removeContact,
   addContact,
