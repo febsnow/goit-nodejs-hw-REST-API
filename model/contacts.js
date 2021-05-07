@@ -11,8 +11,7 @@ const getContacts = async (userId, query) => {
     case false:
       searchParams = { ...searchParams, favorite: false };
       break;
-    default:
-      searchParams;
+    
   }
 
   let result = await Contacts.find(searchParams)
