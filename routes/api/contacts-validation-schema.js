@@ -12,6 +12,15 @@ const addContactValidation = Joi.object({
   favorite: Joi.boolean().optional(),
 });
 
+const queryContactValidation = Joi.object({
+  sortBy: Joi.string().valid('name', 'email', 'owner').optional(),
+  sortByDesc: Joi.string().valid('name', 'email', 'owner').optional(),
+  filter: Joi.string().optional(),
+  limit: Joi.number().integer().min(1).max(10).optional(),
+  offset: Joi.number().integer().min(0).optional(),
+  favorite: Joi.boolean().optional(),
+}).without('sortBy', 'sortByDecs');
+
 const updateContactValidation = Joi.object({
   name: Joi.string().min(2).max(30).optional(),
 
@@ -46,6 +55,9 @@ module.exports = {
   },
   updateStatus: async (req, res, next) => {
     return await validate(updateStatusContactValidation, req.body, next);
+  },
+  queryContact: async (req, res, next) => {
+    return await validate(queryContactValidation, req.query, next);
   },
   // objectId: async (req, res, next) => {
   //   if (!mongoose.Types.ObjectId(req.params.id)) {
