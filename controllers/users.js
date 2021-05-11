@@ -1,8 +1,10 @@
 const Users = require('../model/users');
 const jwt = require('jsonwebtoken');
-const { HttpCode } = require('../helpers/http-codes');
 require('dotenv').config();
 const SECRET_KEY = process.env.SECRET_KEY;
+const { HttpCode } = require('../helpers/http-codes');
+const User = require('../service/schemas/users');
+const saveAvatar = require('../helpers/save-avatar');
 
 const registration = async (req, res, next) => {
   const { email, password } = req.body;
@@ -22,6 +24,7 @@ const registration = async (req, res, next) => {
       data: {
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatar,
       },
     });
   } catch (error) {
@@ -68,4 +71,15 @@ const logout = async (req, res, next) => {
   return res.status(HttpCode.NO_CONTENT).json({});
 };
 
-module.exports = { registration, login, getCurrent, logout };
+const updateAvatar = async (req, res, next) => {
+  const { id } = req.user;
+  const avatarUrl = await saveAvatar(req);
+  await Users.updateAvatar(id, avatarUrl);
+  return res.status(HttpCode.OK).json({
+    status: 'success',
+    code: HttpCode.OK,
+    data: { avatarUrl },
+  });
+};
+
+module.exports = { registration, login, getCurrent, logout, updateAvatar };
