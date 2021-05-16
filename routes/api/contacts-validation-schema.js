@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const mongoose = require('mongoose');
 
 const addContactValidation = Joi.object({
   name: Joi.string().min(2).max(30).required(),
